@@ -3,14 +3,19 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
-rootProject.name = "android-template"
+
+rootProject.name = "AndroidTemplate"
 include(":app")

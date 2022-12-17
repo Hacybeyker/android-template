@@ -4,18 +4,25 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt.gradle)
+    alias(libs.plugins.parcelize)
+    alias(libs.plugins.sonar)
+}
+
+apply {
+    from("sonarqube.gradle")
+    from("jacoco.gradle")
 }
 
 android {
-    namespace = "com.hacybeyker.template"
+    namespace = ConfigureApp.applicationId
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.hacybeyker.template"
+        applicationId = ConfigureApp.applicationId
         minSdk = 23
         targetSdk = 33
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = ConfigureApp.versionCode
+        versionName = ConfigureApp.versionName
 
         testInstrumentationRunner = "com.hacybeyker.template.HiltTestRunner"
         vectorDrawables {
@@ -25,11 +32,39 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"YOUR_BASE_URL\"")
+        }
+        create("qa") {
+            initWith(getByName("debug"))
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            applicationIdSuffix = ".qa"
+            //versionNameSuffix = "-qa"
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "BASE_URL", "\"YOUR_BASE_URL\"")
+        }
+        getByName("debug") {
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            applicationIdSuffix = ".debug"
+            //versionNameSuffix = "-debug"
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "BASE_URL", "\"YOUR_BASE_URL\"")
         }
     }
 
@@ -45,7 +80,7 @@ android {
     buildFeatures {
         compose = true
         aidl = false
-        buildConfig = false
+        buildConfig = true
         renderScript = false
         shaders = false
     }

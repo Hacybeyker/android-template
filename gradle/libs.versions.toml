@@ -14,6 +14,8 @@ coroutines = "1.6.4"
 kotlin = "1.7.20"
 hilt = "2.44.2"
 junit = "4.13.2"
+jacoco = "0.8.7"
+sonar = "3.3"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -51,3 +53,6 @@ android-library = { id = "com.android.library", version.ref = "androidGradlePlug
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+jacoco = { id = "jacoco", version.ref = "jacoco" }
+sonar = { id = "org.sonarqube", version.ref = "sonar" }
