@@ -20,7 +20,7 @@ echo "Do you like add Sonar at project?"
 select SONAR_SELECTED in yes no
 do
 # github actions
-echo "Do you like add GitthubActions at project?"
+echo "Do you like add GithubActions at project?"
 select GIHUB_ACTIONS_SELECTED in yes no
 do
 echo "Well Done! ;)  - It's was your selected options:"
@@ -66,7 +66,8 @@ echo "=================================================="
 
 # Change folder main
 echo "Changing folder main project"
-mkdir -p $APPNAME
+mkdir $APPNAME
+shopt -s dotglob ./android-template
 mv ./android-template/* $APPNAME
 rm -rf ./android-template
 echo "Done!"
@@ -120,9 +121,8 @@ echo "=================================================="
 echo "Configuring JaCoCo"
 if [[ $JACOCO_SELECTED == "" || $JACOCO_SELECTED == "no" ]]
 then
-	sed --in-place '/from("jacoco.gradle")/d' $APPNAME/app/build.gradle.kts
+	sed --in-place '/from = "jacoco.gradle"/d' $APPNAME/app/build.gradle.kts
 	rm -rf $APPNAME/app/jacoco.gradle
-	rm -rf $APPNAME/app/filter.gradle
 fi
 echo "Done!"
 echo "=================================================="
@@ -132,7 +132,7 @@ echo "Configuring SonarQube"
 if [[ $SONAR_SELECTED == "" || $SONAR_SELECTED == "no" ]]
 then
 	sed --in-place '/alias(libs.plugins.sonar)/d' $APPNAME/app/build.gradle.kts
-	sed --in-place '/from("sonarqube.gradle")/d' $APPNAME/app/build.gradle.kts
+	sed --in-place '/from = "sonarqube.gradle"/d' $APPNAME/app/build.gradle.kts
 	rm -rf $APPNAME/app/sonarqube.gradle
 fi
 echo "Done!"
@@ -142,8 +142,9 @@ echo "=================================================="
 echo "Configuring Github Actions"
 if [[ $GIHUB_ACTIONS_SELECTED == "" || $GIHUB_ACTIONS_SELECTED == "no" ]]
 then
+	echo "NOOOP"
 	rm -rf $APPNAME/.github
-elif
+else
 	echo "yes selected"
 	echo "update package"
 	sed --in-place '/TODO change for your packageName/d' $APPNAME/.github/workflows/actions/android_publish.yml
@@ -152,17 +153,17 @@ fi
 echo "Done!"
 echo "=================================================="
 
-# Clean file .back
+# Remove additional files
+echo "Removing additional files"
+rm -rf $APPNAME/.git/
+rm -rf $APPNAME/jarvis.sh #jarvis.sh
+rm -rf $APPNAME/README.md
+rm -rf $APPNAME/CHANGELOG.md
+
+# Clean file .bak
 echo "Cleaning up"
 find $APPNAME/ -name "*.bak" -type f -delete
 echo "Done!"
 echo "=================================================="
-
-# Remove additional files
-echo "Removing additional files"
-rm -rf $APPNAME/.git/
-rm -rf $APPNAME/jarvis.sh jarvis.sh
-rm -rf $APPNAME/README.md
-rm -rf $APPNAME/CHANGELOG.md
 
 echo "Done!"

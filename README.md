@@ -45,7 +45,7 @@ Interface with compose support
 
 ## Usage
 
-1. Download the [jarvis.sh](https://github.com/Hacybeyker/android-template/blob/feature-actions-lint/jarvis.sh) file and give permissions to use it:
+1. Download the [jarvis.sh](https://raw.githubusercontent.com/Hacybeyker/android-template/feature-actions-lint/jarvis.sh) file and give permissions to use it:
 ```
 chmod +x jarvis.sh
 ```

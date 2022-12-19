@@ -5,13 +5,14 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt.gradle)
     alias(libs.plugins.parcelize)
+    alias(libs.plugins.secrets)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.sonar)
 }
 
-apply {
-    from("sonarqube.gradle")
-    from("jacoco.gradle")
-}
+apply(from = "jacoco.gradle")
+apply(from = "sonarqube.gradle")
 
 android {
     namespace = ConfigureApp.applicationId
@@ -47,7 +48,7 @@ android {
             isMinifyEnabled = false
             isShrinkResources = false
             applicationIdSuffix = ".qa"
-            //versionNameSuffix = "-qa"
+            // versionNameSuffix = "-qa"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -59,7 +60,7 @@ android {
             isMinifyEnabled = false
             isShrinkResources = false
             applicationIdSuffix = ".debug"
-            //versionNameSuffix = "-debug"
+            // versionNameSuffix = "-debug"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -92,6 +93,58 @@ android {
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    bundle {
+        language {
+            enableSplit = true
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+
+    lint {
+        disable.addAll(
+            listOf(
+                "TypographyFractions",
+                "TypographyQuotes",
+                "JvmStaticProvidesInObjectDetector",
+                "FieldSiteTargetOnQualifierAnnotation",
+                "ModuleCompanionObjects",
+                "ModuleCompanionObjectsNotInModuleParent"
+            )
+        )
+        checkDependencies = true
+        abortOnError = false
+        ignoreWarnings = false
+    }
+
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    detekt {
+        buildUponDefaultConfig = true
+        allRules = true
+        config = files("$projectDir/config/detekt.yml")
+        reports {
+            html.enabled = true
+            xml.enabled = true
+            txt.enabled = false
+            sarif.enabled = false
+        }
+    }
+
+    tasks {
+        "preBuild" {
+            dependsOn("ktlintFormat")
+            dependsOn("ktlintCheck")
+            dependsOn("detekt")
         }
     }
 }
@@ -139,4 +192,7 @@ dependencies {
     // Instrumented tests: jUnit rules and runners
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.runner)
+
+    // Detekt
+    detektPlugins(libs.detekt.formatting)
 }
