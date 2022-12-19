@@ -1,1 +1,0 @@
-C:\Users\hacybeyker\Desktop\SamplesAndroid\android-template\buildSrc\build\classes\kotlin\main\ConfigureApp.class
