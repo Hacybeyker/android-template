@@ -41,7 +41,7 @@ done
 break;
 done
 
-#download project from github repository
+# Download project from github repository
 echo "Download project from github repository"
 declare REPOSITORY="https://github.com/Hacybeyker/android-template.git"
 declare BRANCH=""
@@ -49,15 +49,15 @@ declare PATH_DOWNLOAD=""
 
 if [ $PROJECT_TYPE == "main(apk/aab)" ]
 then
-	BRANCH="feature-actions-lint"
+  BRANCH="feature-actions-lint"
 fi
 if [ $PROJECT_TYPE == "module(aar)" ]
 then
-	BRANCH="module"
+  BRANCH="module"
 fi
 if [ $PROJECT_TYPE == "flavors(aar)" ]
 then
-	BRANCH="flavors"
+  BRANCH="flavors"
 fi
 PATH_DOWNLOAD="git clone $REPOSITORY --branch $BRANCH"
 $PATH_DOWNLOAD
@@ -67,8 +67,7 @@ echo "=================================================="
 # Change folder main
 echo "Changing folder main project"
 mkdir $APPNAME
-shopt -s dotglob ./android-template
-mv ./android-template/* $APPNAME
+mv ./android-template/* ./android-template/.[!.]* $APPNAME
 rm -rf ./android-template
 echo "Done!"
 echo "=================================================="
@@ -109,10 +108,10 @@ if [[ $APPNAME ]]
 then
 	echo "Renaming app to $APPNAME"
 	declare APPLICATION="${APPNAME}Application"
-	find $APPNAME/ -type f \( -name "MyApplication.kt" -or -name "AndroidManifest.xml" \) -exec sed -i.bak "s/MyApplication/$APPLICATION/g" {} \;
-    find $APPNAME/ -type f \( -name "settings.gradle.kts" -or -name "*.xml" \) -exec sed -i.bak "s/AndroidTemplate/$APPNAME/g" {} \;
-	find $APPNAME/ -type f \( -name "ConfigureApp.kt" \) -exec sed -i.bak "s/com.hacybeyker.template/$PACKAGE/g" {} \;
-    find $APPNAME/ -name "MyApplication.kt" | sed "p;s/MyApplication/$APPLICATION/" | tr '\n' '\0' | xargs -0 -n 2 mv
+  find $APPNAME/ -type f \( -name "MyApplication.kt" -or -name "AndroidManifest.xml" \) -exec sed -i.bak "s/MyApplication/$APPLICATION/g" {} \;
+	find $APPNAME/ -type f \( -name "settings.gradle.kts" -or -name "*.xml" \) -exec sed -i.bak "s/AndroidTemplate/$APPNAME/g" {} \;
+  find $APPNAME/ -type f \( -name "ConfigureApp.kt" \) -exec sed -i.bak "s/com.hacybeyker.template/$PACKAGE/g" {} \;
+	find $APPNAME/ -name "MyApplication.kt" | sed "p;s/MyApplication/$APPLICATION/" | tr '\n' '\0' | xargs -0 -n 2 mv
 fi
 echo "Done!"
 echo "=================================================="
@@ -121,8 +120,8 @@ echo "=================================================="
 echo "Configuring JaCoCo"
 if [[ $JACOCO_SELECTED == "" || $JACOCO_SELECTED == "no" ]]
 then
-	sed --in-place '/from = "jacoco.gradle"/d' $APPNAME/app/build.gradle.kts
-	rm -rf $APPNAME/app/jacoco.gradle
+  find $APPNAME/app/build.gradle.kts -exec sed -i.bak "/jacoco.gradle/d" {} \;
+  rm -rf $APPNAME/app/jacoco.gradle
 fi
 echo "Done!"
 echo "=================================================="
@@ -131,9 +130,9 @@ echo "=================================================="
 echo "Configuring SonarQube"
 if [[ $SONAR_SELECTED == "" || $SONAR_SELECTED == "no" ]]
 then
-	sed --in-place '/alias(libs.plugins.sonar)/d' $APPNAME/app/build.gradle.kts
-	sed --in-place '/from = "sonarqube.gradle"/d' $APPNAME/app/build.gradle.kts
-	rm -rf $APPNAME/app/sonarqube.gradle
+  find $APPNAME/app/build.gradle.kts -exec sed -i.bak "/libs.plugins.sonar/d" {} \;
+  find $APPNAME/app/build.gradle.kts -exec sed -i.bak "/sonarqube.gradle/d" {} \;
+  rm -rf $APPNAME/app/sonarqube.gradle
 fi
 echo "Done!"
 echo "=================================================="
@@ -142,13 +141,10 @@ echo "=================================================="
 echo "Configuring Github Actions"
 if [[ $GIHUB_ACTIONS_SELECTED == "" || $GIHUB_ACTIONS_SELECTED == "no" ]]
 then
-	echo "NOOOP"
-	rm -rf $APPNAME/.github
+  rm -rf $APPNAME/.github
 else
-	echo "yes selected"
-	echo "update package"
-	sed --in-place '/TODO change for your packageName/d' $APPNAME/.github/workflows/actions/android_publish.yml
-	find $APPNAME/.github/workflows/actions/android_publish.yml -exec sed -i.bak "s/com.your.package/$PACKAGE/g" {} \;
+  find $APPNAME/.github/workflows/actions/android_publish.yml -exec sed -i.bak "/#TODO change for your packageName/d" {} \;
+  find $APPNAME/.github/workflows/actions/android_publish.yml -exec sed -i.bak "s/com.your.package/$PACKAGE/g" {} \;
 fi
 echo "Done!"
 echo "=================================================="
