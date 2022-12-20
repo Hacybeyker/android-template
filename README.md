@@ -45,7 +45,7 @@ Interface with compose support
 
 ## Usage
 
-1. Download the [jarvis.sh](https://raw.githubusercontent.com/Hacybeyker/android-template/feature-actions-lint/jarvis.sh) file:
+1. Download the [jarvis.sh](https://raw.githubusercontent.com/Hacybeyker/android-template/main/jarvis.sh) file:
 2. Run the `jarvis.sh` file from your preferred terminal:
 ```
 bash jarvis.sh

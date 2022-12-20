@@ -49,7 +49,7 @@ declare PATH_DOWNLOAD=""
 
 if [ $PROJECT_TYPE == "main(apk/aab)" ]
 then
-  BRANCH="feature-actions-lint"
+  BRANCH="main"
 fi
 if [ $PROJECT_TYPE == "module(aar)" ]
 then
