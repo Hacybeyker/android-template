@@ -45,13 +45,9 @@ Interface with compose support
 
 ## Usage
 
-1. Download the [jarvis.sh](https://raw.githubusercontent.com/Hacybeyker/android-template/feature-actions-lint/jarvis.sh) file and give permissions to use it:
-```
-chmod +x jarvis.sh
-```
-3. Run the `jarvis.sh` file from your preferred terminal:
+1. Download the [jarvis.sh](https://raw.githubusercontent.com/Hacybeyker/android-template/feature-actions-lint/jarvis.sh) file:
+2. Run the `jarvis.sh` file from your preferred terminal:
 ```
 bash jarvis.sh
 ```
-5. Provide the wizard with the required information and the settings you want to add to the project.
-6. Wait a moment and enjoy creating the project.
+3. Provide the wizard with the required information and the settings you want to add to the project.
